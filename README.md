@@ -1,4 +1,4 @@
-## aichat.nvim [WIP]
+## aichat.nvim
 
 *A Neovim plugin that provides an integrated AI chatbot experience within your editor.*
 
@@ -19,5 +19,15 @@
 
 **Usage:**
 
-* Start a chat session using the command `:AiChat`.
-* Reset the current chat conversation using `<leader>r` in normal mode.
+* `:AiChat`: Starts a new AI chat session.
+
+**Normal Mode:**
+
+* `<Esc><Esc>` or `q`: Quits the current chat session.
+* `<leader>r`: Resets the current chat conversation.
+* `<C-k>`: Switches the focus to the upper window (input or response, depending on current focus).
+* `<C-j>`: Switches the focus to the lower window (input or response, depending on current focus).
+
+**Insert Mode:**
+
+* `<CR>` (Enter): Sends the current input to the AI.
