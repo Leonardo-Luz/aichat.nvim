@@ -159,6 +159,13 @@ local exit_window = function()
   end)
 end
 
+local function goto_buffer_end(floating, offset)
+  local last_line = vim.api.nvim_buf_line_count(floating.buf)
+  local last_col = vim.api.nvim_buf_get_lines(floating.buf, last_line - 1, last_line, false)[1]:len()
+
+  vim.api.nvim_win_set_cursor(floating.win, { last_line - offset, last_col + 1 })
+end
+
 local set_content = function()
   local footer = string.format("  AI CHAT BOT v.1.0")
 
@@ -242,12 +249,17 @@ local create_remaps = function()
 
     set_content()
 
+    goto_buffer_end(state.window_config.response.floating, 2)
+
     local async_gen = function()
+      local generated_text = generate_ai_text({ prompt = input }).generated_text
+
       state.buftext = string.gsub(state.buftext, "loading...\n$", "")
-      state.buftext = state.buftext
-        .. (state.buftext == "" and "" or "\n")
-        .. generate_ai_text({ prompt = input }).generated_text
+      state.buftext = state.buftext .. (state.buftext == "" and "" or "\n") .. generated_text .. "\n"
       set_content()
+
+      local count = #vim.split(generated_text, "\n")
+      goto_buffer_end(state.window_config.response.floating, count)
     end
 
     state.loop = vim.fn.timer_start(20, async_gen, { ["repeat"] = 1 })
