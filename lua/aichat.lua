@@ -52,8 +52,8 @@ local create_window_config = function()
 
   local header_height = 2
   local footer_height = 1
-  local response_height = math.floor((float_height - header_height - footer_height + 3) / 2)
-  local input_height = response_height - 5 - 1 - 3
+  local response_height = math.floor(float_height / 2)
+  local input_height = response_height - 5 - 1 - 3 - 1
 
   return {
     background = {
@@ -117,7 +117,7 @@ local create_window_config = function()
         style = "minimal",
         zindex = 3,
         width = float_width - 20,
-        height = input_height - 2,
+        height = input_height,
         col = col + 9,
         row = row + response_height + 6,
         border = { " ", " ", " ", " ", " ", " ", " ", "" },
