@@ -52,8 +52,8 @@ local create_window_config = function()
 
   local header_height = 2
   local footer_height = 1
-  local response_height = math.floor(float_height / 2)
-  local input_height = response_height - 5 - 1 - 3 - 1
+  local response_height = math.floor(float_height / 2) - 1
+  local input_height = 1 -- response_height - 5 - 1 - 3 - 1
 
   return {
     background = {
@@ -100,7 +100,7 @@ local create_window_config = function()
         style = "minimal",
         zindex = 3,
         width = float_width - 20,
-        height = response_height - 1,
+        height = response_height,
         col = col + 9,
         row = row + 5,
         border = { " ", " ", " ", " ", " ", " ", " ", " " },
@@ -119,7 +119,7 @@ local create_window_config = function()
         width = float_width - 20,
         height = input_height,
         col = col + 9,
-        row = row + response_height + 6,
+        row = (float_height + response_height + header_height) - row - 1,
         border = { " ", " ", " ", " ", " ", " ", " ", "" },
       },
     },
@@ -170,6 +170,12 @@ local set_content = function()
   local footer = string.format("  AI CHAT BOT v.1.0")
 
   local lines = vim.split(state.buftext, "\n")
+
+  local title_text = "AI Chat Bot"
+  local padding = string.rep(" ", (state.window_config.header.opts.width - #title_text) / 2)
+  local title = padding .. title_text
+
+  vim.api.nvim_buf_set_lines(state.window_config.header.floating.buf, 0, -1, false, { title })
 
   vim.api.nvim_buf_set_lines(state.window_config.footer.floating.buf, 0, -1, false, { footer })
 
@@ -309,12 +315,6 @@ M.start = function()
   foreach_float(function(_, float)
     float.floating = floatwindow.create_floating_window(float)
   end)
-
-  local title_text = "AI Chat Bot"
-  local padding = string.rep(" ", (state.window_config.header.opts.width - #title_text) / 2)
-  local title = padding .. title_text
-
-  vim.api.nvim_buf_set_lines(state.window_config.header.floating.buf, 0, -1, false, { title })
 
   vim.bo[state.window_config.response.floating.buf].filetype = "markdown"
 
